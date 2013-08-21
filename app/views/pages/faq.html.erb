@@ -4,7 +4,7 @@
 		<dl>
         <dt>How do I make a meal?</dt>
 
-				<dd>To make a meal, go to your <b><%= signed_in? ? link_to('home', user_path(current_user)) : link_to('home', root_path) %></b> page and select the <b>date</b> you ate the meal. Select the time of day and location if you'd like. Then, start typing your food into the <b>input field</b>. Once you start typing, a list of possible matches from the database shows up. If there are too many matches, try refining your search (eg. "Chicken Pot Pie" instead of "Pie" or "Chicken") and/or scrolling the list to find the best match for what you ate. Change the number in the serving size box if necessary (this number can be a decimal, such as 0.5). You may also remove items by clicking the x on the top-right corner of the box.</dd><br/>
+				<dd>To make a meal, go to your <b><%= signed_in? ? link_to('home', user_path(current_user)) : link_to('home', root_path) %></b> page and select the <b>date</b> you ate the meal. Select the location if you'd like. Then, start typing your food into the <b>input field</b>. Once you start typing, a list of possible matches from the database shows up. If there are too many matches, try refining your search (eg. "Chicken Pot Pie" instead of "Pie" or "Chicken") and/or scrolling the list to find the best match for what you ate. Change the number in the serving size box if necessary (this number can be a decimal, such as 0.5). You may also remove items by clicking the x on the top-right corner of the box.</dd><br/>
 				
 				<dd>If you would like to add another item, simply press <b>the plus sign</b> and follow the steps above. Once you are done adding your meal, press <b>"Submit"</b>, and that's it!</dd>
 				

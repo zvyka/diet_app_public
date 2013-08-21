@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
   # end
   
   def create
+    $dining_services_special = false
     user = User.authenticate_with_UID(session[:cas_user])
     if user.nil?
       flash.now[:error] = "Oops, looks like you aren't registered!" #"Oops, looks like you are a new user, please click the link on the bottom of the page to continue."

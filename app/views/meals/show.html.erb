@@ -4,7 +4,7 @@
 			<li>
 				<h1 id="show_date"><%= @meal.date_eaten.strftime("%A, %B %e") %></h1>
 				<%= link_to "Edit", { :controller => "meals", :action => "new", :date_eaten => "#{@meal.date_eaten.year}-#{@meal.date_eaten.month}-#{@meal.date_eaten.day}"}, "data-reveal-id"=>"myModal", "data-date-eaten"=> "#{@meal.date_eaten.year}-#{@meal.date_eaten.month}-#{@meal.date_eaten.day}", :class=> "nice medium radius blue button", :id => "edit_meal"%>
-				<%= link_to 'Delete', @meal, :method => :delete, :class => "nice medium red button" %>
+				<%= link_to 'Delete', @meal, :method => :delete, :class => "nice medium radius red button" %>
 			</li>
 			<li>
 				<div id="todays_chart" class="offset-by-five"></div>
@@ -75,10 +75,20 @@
 						                  color: 'red'
 						               }
 						            }
-						         }, { // MAX
-						            from: 0,
+						         }, { // bit low
+						            from: 70,
 						            to: 100,
 						            color: 'rgba(0, 255, 0, 0.1)',
+						            label: {
+						               text: '',
+						               style: {
+						                  color: 'green'
+						               }
+						            }
+						         }, { // too low
+						            from: 0,
+						            to: 70,
+						            color: 'rgba(255, 255, 255, 0.3)',
 						            label: {
 						               text: '',
 						               style: {
@@ -159,12 +169,12 @@
 								</div>
 								<div class="four columns">
 										<div class="row">
-											<span class="green radius label">Calories: <%= h('%.0f' % (food.calories)) %></span>
-											<span class="green radius label">Sodium: <%= h('%.0f' % (food.sodium)) %>mg</span>
+											<span class="<%= ingredient.cals_dv %> radius label">Calories: <%= h('%.0f' % (food.calories)) %></span>
+											<span class="<%= ingredient.salt_dv %> radius label">Sodium: <%= h('%.0f' % (food.sodium)) %>mg</span>
 										</div>
 										<div class="row">
-											<span class="green radius label">Fats: <%= h('%.0f' % (food.lipid_total))%>g</span>
-											<span class="green radius label">Sugar: <%= h('%.0f' % (food.sugar_total)) %>g</span>
+											<span class="<%= ingredient.fats_dv %> radius label">Fats: <%= h('%.0f' % (food.lipid_total))%>g</span>
+											<span class="<%= ingredient.sugs_dv %> radius label">Sugar: <%= h('%.0f' % (food.sugar_total)) %>g</span>
 										</div>
 								</div>
 							</div>

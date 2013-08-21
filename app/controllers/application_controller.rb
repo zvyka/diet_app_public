@@ -13,5 +13,5 @@ class ApplicationController < ActionController::Base
     # def logout
     #    CASClient::Frameworks::Rails::Filter.logout(self)
     #  end 
-
+    # $dining_services_special = false
 end

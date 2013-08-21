@@ -1,58 +1,63 @@
-<div id="update_email">
-	<span>Update your email address</span>
-	<%= form_for(@user) do |f| %>
-	  <%= render 'shared/error_messages', :object => f.object %>
-	  <div class="field">
-			<br/>
-	    <%= f.text_field :email %>
-	  </div>
-	  <div class="actions">
-	    <%= f.submit "Update" %>
-	  </div>
-	<% end %>
-</div>
-
 <h1><%= @user.name %>'s Profile</h1>
-
-<% if @user.group_id == 1 || @user.group_id == 3 %>
 <div class="row">
-	<div class="six columns">
-		<div class="panel">
-			<h4>Email Reminder options</h4>
-			<span><i>Emails will be sent around 7 p.m. on the day you've chosen.</i></span>
-			<%= form_for(@user) do |f| %>
-			  <%= render 'shared/error_messages', :object => f.object %>
-			  <div class="field">
-			    <%= check_box_tag("user[reminder_freq][]", "Sun", @Sun) %> Sunday     <br/>
-			    <%= check_box_tag("user[reminder_freq][]", "Mon", @Mon) %> Monday 		<br/>
-			    <%= check_box_tag("user[reminder_freq][]", "Tue", @Tue) %> Tuesday    <br/>
-			    <%= check_box_tag("user[reminder_freq][]", "Wed", @Wed) %> Wednesday  <br/>
-			    <%= check_box_tag("user[reminder_freq][]", "Thu", @Thu) %> Thursday   <br/>
-			    <%= check_box_tag("user[reminder_freq][]", "Fri", @Fri) %> Friday     <br/>
-			    <%= check_box_tag("user[reminder_freq][]", "Sat", @Sat) %> Saturday   <br/>
+	<div class="seven columns">
+			<div class="panel">		
+				<div class="row">
+					<div class="four columns"><%= link_to image_tag("search.png", :style => "width: 128px; height: 128px;"), food_search_path %><span>Search the database</span></div>
+					<div class="four columns"><%= link_to image_tag("add_food.png", :style => "width: 128px; height: 128px;"), new_food_path %><span>Add a new custom food</span></div>
+					<div class="four columns"><%= link_to image_tag("list_food.png", :style => "width: 128px; height: 128px;"), myfoods_path %><span>See the foods you've added</span></div>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="row">
+				<%= form_for(@user) do |f| %>
+				  <%= render 'shared/error_messages', :object => f.object %>
+				<h4>Email reminder options</h4>
+				<span><i>Emails will be sent around 7 p.m. on the day you've chosen.</i></span>
+				  <div class="field">
+				    <%= check_box_tag("user[reminder_freq][]", "Sun", @Sun) %> Sunday     <br/>
+				    <%= check_box_tag("user[reminder_freq][]", "Mon", @Mon) %> Monday 		<br/>
+				    <%= check_box_tag("user[reminder_freq][]", "Tue", @Tue) %> Tuesday    <br/>
+				    <%= check_box_tag("user[reminder_freq][]", "Wed", @Wed) %> Wednesday  <br/>
+				    <%= check_box_tag("user[reminder_freq][]", "Thu", @Thu) %> Thursday   <br/>
+				    <%= check_box_tag("user[reminder_freq][]", "Fri", @Fri) %> Friday     <br/>
+				    <%= check_box_tag("user[reminder_freq][]", "Sat", @Sat) %> Saturday   <br/>
+						<%=text_field_tag 'user[reminder_freq][]', "", :type => "hidden" %>
+				  </div>
+				<br/>
+				<h4>Activity Level</h4>
+				<div class="field">
+					<%= f.label :activity_level, "Enter your activity level for more personalized nutritional goals." %>
+			    <%= f.select :activity_level, [["Sedentary", 1], ["Moderately Active", 2], ["Active", 3]] %>
+				</div>
+				<div><i>Your current recommended calories are <%= @user.rec_cals %></i></div>
+				<br/>
+				<h4>Email Address</h4>
+				<div class="field">
+					<%= f.label :email, "Update your email address to stay in touch"%>
+			    <%= f.text_field :email %>
 			  </div>
+
 			  <div class="actions">
-			    <%= f.submit "Update" %>
+			    <%= f.submit "Update", :class => "nice large radius blue button" %>
 			  </div>
-			<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<div class="five columns">
+		<div class="panel">
+				<h4>More about activity levels:</h4>
+				<br/>						
+				<p><span class="label">Sedentary</span>	a lifestyle that includes only the light physical activity associated with typical day-to-day life.</p>					
+				<p><span class="label">Moderately Active</span>	a lifestyle that includes physical activity equivalent to walking about 1.5 to 3 miles per day at 3 to 4 miles per hour, in addition to the light physical activity associated with typical day-to-day life.	</p>				
+
+				<p><span class="label">Active</span> a lifestyle that includes physical activity equivalent to walking more than 3 miles per day at 3 to 4 miles per hour, in addition to the light physical activity associated with typical day-to-day life</p>					
+
+
+			<i><p>This data is based on Estimated Energy Requirements (EER) equations, using reference heights (average) and reference weights (healthy) for each age-gender group. For adults, the reference man is 5 feet 10 inches tall and weighs 154 pounds. The reference woman is 5 feet 4 inches tall and weighs 126 pounds. EER equations are from the Institute of Medicine. Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids. Washington (DC): The National Academies Press; 2002. </p>						
+			</i>
 		</div>
 	</div>
 </div>
-<% end %>
-<script>
-	$('readonly="readonly"').click(function() {
-	return false;
-	});
-</script>
-<table id="profile_link_pics">
-	<tr>
-		<td><%= link_to image_tag("search.png", :style => "width: 128px; height: 128px;"), food_search_path %></td>
-		<td><%= link_to image_tag("add_food.png", :style => "width: 128px; height: 128px;"), new_food_path %></td>
-		<td><%= link_to image_tag("list_food.png", :style => "width: 128px; height: 128px;"), myfoods_path %></td>
-	</tr>
-	<tr>
-		<td><span>Search the database</span></td>
-		<td><span>Add a new custom food</span></td>
-		<td><span>See the foods you've added</span></td>
-	</tr>
-</table>
+	

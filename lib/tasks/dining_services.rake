@@ -33,16 +33,16 @@ task :import_foodpro => :environment do
           if !food_page.search("font:nth-child(6) b").text.strip.blank? #if the name is not blank...
             db_food = Food.find_by_name(page_food_name) #search the database to see if the food already exists
             
-            page_calories = food_page.search("font:nth-child(6) b").text.strip[/\d.?\d?/].to_f
-            page_protein = food_page.search("tr:nth-child(5) td:nth-child(3) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_lipid_total =  food_page.search("tr:nth-child(2) td:nth-child(1) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_carbohydrates = food_page.search("tr:nth-child(2) td:nth-child(3) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_fiber = food_page.search("tr:nth-child(3) td:nth-child(3) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_sugar_total = food_page.search("tr:nth-child(4) td:nth-child(3) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_calcium = food_page.search("td td td font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_sodium = food_page.search("tr:nth-child(6) td:nth-child(1) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_fa_sat = food_page.search("tr:nth-child(3) td:nth-child(1) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
-            page_cholesterol = food_page.search("tr:nth-child(5) td:nth-child(1) font:nth-child(2)").text.strip[/\d.?\d?/].to_f
+            page_calories = food_page.search("font:nth-child(6) b").text.strip[/\d+.?\d+/].to_f
+            page_protein = food_page.search("tr:nth-child(5) td:nth-child(3) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_lipid_total =  food_page.search("tr:nth-child(2) td:nth-child(1) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_carbohydrates = food_page.search("tr:nth-child(2) td:nth-child(3) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_fiber = food_page.search("tr:nth-child(3) td:nth-child(3) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_sugar_total = food_page.search("tr:nth-child(4) td:nth-child(3) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_calcium = food_page.search("td td td font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_sodium = food_page.search("tr:nth-child(6) td:nth-child(1) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_fa_sat = food_page.search("tr:nth-child(3) td:nth-child(1) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
+            page_cholesterol = food_page.search("tr:nth-child(5) td:nth-child(1) font:nth-child(2)").text.strip[/\d+.?\d+/].to_f
             page_weight_1_desc = food_page.search("font:nth-child(4)").text.strip
             
             if db_food.blank?   #if this food has never been in the database, add it
@@ -260,7 +260,7 @@ task :import_foodpro => :environment do
                                   fa_sat is         #{db_food.fa_sat}, 
                                   cholesterol is    #{db_food.cholesterol}, 
                                   weight_1_desc is  #{db_food.weight_1_desc}"
-              end                            
+              end
             end
           else
             puts "Blank info: #{page_food_name}"              

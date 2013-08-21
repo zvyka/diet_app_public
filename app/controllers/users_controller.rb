@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
   before_filter :correct_user, :only => [:edit, :update]
   before_filter :admin_user,   :only => [:destroy, :index]
-  
+
   def index
     @title = "All users"
     @users = User.paginate(:page => params[:page])
@@ -14,6 +14,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    $dining_services_special = false
     @meal = Meal.new
     @meal.ingredients.build
     
@@ -49,28 +50,28 @@ class UsersController < ApplicationController
   end
   
   def create
-    # @user = User.new(params[:user])
-    # if @user.save
-    @user = User.find_by_id_num(params[:user][:id_num])
-    if !@user.nil?
-      @user.UID = params[:user][:UID]
-      if @user.save
+    @user = User.new(params[:user])
+    if @user.save
+    # @user = User.find_by_id_num(params[:user][:id_num])
+    # if !@user.nil?
+    #   @user.UID = params[:user][:UID]
+    #   if @user.save
         sign_in @user
         flash[:success] = "Welcome!"
         redirect_to @user
         f = File.new('/Users/jon/Sites/mail_pass.txt')
         pass= f.gets
         Pony.mail(:from => 'teamdietumd@gmail.com', :to => @user.email, :subject => 'Team DIET Welcomes You!', 
-                  :html_body => "<p>Dear #{@user.name}</p> <p> Welcome to our online diet-tracking tool! Your account is now active and ready for you to begin tracking your meals. You may log in at any time at <a href='http://diettracker.umd.edu'>http://diettracker.umd.edu</a>. Please refer to our Help section on our website to familiarize yourself with our tool.</p> <p> We thank you for participating in our research study.  </p> <p>Sincerely,</p> <p>Team DIET</p> <p>Gemstone Program,  UMD Honors Program</p> <p>*By virtue of logging into and using this diet tracker, you agree to the terms and conditions as listed at http://diettracker.umd.edu/terms *</p>",
+                  :html_body => "<p>Dear #{@user.name}</p> <p> Welcome to our online diet-tracking tool! Your account is now active and ready for you to begin tracking your meals. You may log in at any time at <a href='http://diettracker.umd.edu'>http://diettracker.umd.edu</a>. Please refer to our Help section on our website to familiarize yourself with our tool.</p> <p>Thanks for your interest in our website!  </p> <p>Sincerely,</p> <p>Team DIET</p> <p>Gemstone Program,  UMD Honors Program</p> <p>*By virtue of logging into and using this diet tracker, you agree to the terms and conditions as listed at http://diettracker.umd.edu/terms *</p>",
                   :body => "Dear #{@user.name},
 
                   Welcome to our online diet-tracking tool! Your account is now active and ready for you to begin tracking your meals. You may log in at any time using your UID and password at http://diettracker.umd.edu. Please refer to the Help section on our website to familiarize yourself with our tool. 
 
-                  We thank you for participating in our research study. 
+                  Thanks for your interest in our website! 
 
                   Sincerely, 
                   	Team DIET
-                  	Gemstone Program, A. James Clark School of Engineering 
+                  	Gemstone Program, UMD Honors Program 
 
                   	*By virtue of logging into and using this diet tracker, you agree to the terms and conditions as listed at http://diettracker.umd.edu/terms *" ,:via => :smtp, :via_options => {
             :address              => 'smtp.gmail.com',
@@ -85,14 +86,13 @@ class UsersController < ApplicationController
         @title = "Oops"
         render 'new'
       end
-    else
-      redirect_to signup_path, :notice => "Oops! We didn't find you, please try re-entering your UID. Note that we are not accepting new users at this time. If you already took the survey and should have access, please contact us as soon as possible at teamdietumd@gmail.com."
-    end
+    # else
+    #   redirect_to signup_path, :notice => "Oops! We didn't find you, please try re-entering your UID. Note that we are not accepting new users at this time. If you already took the survey and should have access, please contact us as soon as possible at teamdietumd@gmail.com."
+    # end
   end
   
   def edit
     @title = "Edit user"
-    if @user.group_id == 1 || @user.group_id == 3
       if !@user.reminder_freq.nil?
         reminder_string = @user.reminder_freq 
     
@@ -103,7 +103,6 @@ class UsersController < ApplicationController
         @Thu = reminder_string["Thu"].nil? ? false : true
         @Fri = reminder_string["Fri"].nil? ? false : true
         @Sat = reminder_string["Sat"].nil? ? false : true
-      end
     end
   end
   
@@ -134,9 +133,7 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    if @user.group_id == 1 || @user.group_id == 3
-      params[:user][:reminder_freq] = params[:user][:reminder_freq].join(",") if !params[:user][:reminder_freq].nil?
-    end
+    params[:user][:reminder_freq] = params[:user][:reminder_freq].join(",") if !params[:user][:reminder_freq].nil?
     if @user.update_attributes(params[:user])
       flash[:success] = "Profile updated."
       redirect_to edit_user_path(@user)

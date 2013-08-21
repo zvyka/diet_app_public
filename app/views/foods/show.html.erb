@@ -3,13 +3,129 @@
 		<%= link_to "Delete", @food, :method => :delete %> |
 		<%= link_to 'Edit', edit_food_path(@food) %> |
 	<% end %>
-	<%= link_to "Search Again", food_search_path %> |
-	<%= link_to "My Foods", myfoods_path %>
+	<% if current_user.nil? %>
+		<h4><%= link_to "Search Again", dining_services_path %></h4> 
+	<% else %>
+		<%= link_to "Search Again", food_search_path %> |
+		<%= link_to "My Foods", myfoods_path %>
+	<% end %>
 </div>
 
 <% food = @food %>
 
+		<script>
+		var chart;
+		var dv_labels = new Array();
+		dv_labels['Calories'] = '<%= @dvs[:calories] %> calorie diet.';
+		dv_labels['Sodium'] = '<%= @dvs[:sodium] %>mg DV.';
+		dv_labels['Fats'] = '<%= @dvs[:total_fat] %>g DV.';
+		dv_labels['Sugars'] = '<%= @dvs[:sugar_total] %>g DV.';
+	
+		var dv_data = new Array();
+		dv_data['Calories'] = <%= @dvs[:calories] %>;
+		dv_data['Sodium'] = <%= @dvs[:sodium] %>;
+		dv_data['Fats'] = <%= @dvs[:total_fat] %>;
+		dv_data['Sugars'] = <%= @dvs[:sugar_total] %>;
+
+		if (Math.max.apply(0,dv_data) > 100)
+			max_val = Math.max.apply(0,dv_data)
+		else
+			max_val = 100
+	
+		$(document).ready(function() {
+		   chart = new Highcharts.Chart({
+		      chart: {
+		         renderTo: 'food_chart',
+		         defaultSeriesType: 'column',
+			        width: 400,
+							height: 200,
+							backgroundColor: 'rgba(0, 0, 0, 0)'
+		      },
+		      title: {
+		         text: 'Nutrition Summary'
+		      },
+					//None for now
+		      // subtitle: { 
+		      //    text: ''
+		      // },
+		      xAxis: {
+		         categories: [
+		            'Calories',
+					'Sodium',
+					'Fats',
+					'Sugars'
+		         ]
+		      },
+		      yAxis: {
+		         min: 0,
+						 max: max_val,
+		         title: {
+		            text: 'Daily Value'
+		         },
+						labels: {
+						            formatter: function() {
+						                return this.value +'%';
+						            }
+						        },
+						plotLines: [{
+						            color: 'red',
+						            width: 2,
+						            value: 100
+						        }],
+						gridLineWidth: 0
+		      },
+			    legend: {
+			        enabled: false
+			    },
+				
+		      tooltip: {
+		         formatter: function() {
+		            return ''+
+		               Math.round(this.y/100*dv_data[this.x])+ ' is ' + this.y + '% of a ' + dv_labels[this.x];
+		         }
+		      },
+	
+		      plotOptions: {
+			       series: {
+			            colorByPoint: true
+			        },
+							line: {
+							            lineWidth: 4,
+							            states: {
+							               hover: {
+							                  lineWidth: 5
+							               }
+							            },
+							            marker: {
+							               enabled: false,
+							               states: {
+							                  hover: {
+							                     enabled: false
+							                  }
+							               }   
+							            }
+							}
+		      },
+		      series: [{
+						 type: 'column',
+		         data: [<%= @chart_data %>],
+							dataLabels: {
+							                enabled: true,
+															y: -4,
+															formatter: function() {
+															                    return Math.round(this.y/100*dv_data[this.x]);
+															                },
+															color: 'black'
+							            }
+		      }]                 
+		   });                  
+
+
+		});
+		</script>
+
 <h1><%= food.name %></h1>
+<div class="six columns centered" id="food_chart"></div>
 <div class="row" id="nut_facts_table">
 	<div class="twelve columns">
 			<ul class="block-grid four-up heading">
@@ -248,4 +364,4 @@
 </div>
 
 	<p>The nutrient composition of food may vary due to: genetic, environmental and processing variables; changes in the manufacturer's product formulation; and cooking and preparation techniques.</p>    
-	<p>The information Team DIET and/or UMD Dining provides should be considered as approximations of the nutritional analysis menu items.</p>
+	<p>The information provided should be considered as approximations of the nutritional analysis menu items.</p>

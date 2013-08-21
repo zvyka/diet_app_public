@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120305041328) do
+ActiveRecord::Schema.define(:version => 20120908182753) do
 
   create_table "announcements", :force => true do |t|
     t.text     "message"
@@ -129,6 +129,8 @@ ActiveRecord::Schema.define(:version => 20120305041328) do
     t.integer  "id_num"
     t.integer  "weight"
     t.string   "reminder_freq",      :default => "0"
+    t.integer  "activity_level",     :default => 0
+    t.integer  "num_meals"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

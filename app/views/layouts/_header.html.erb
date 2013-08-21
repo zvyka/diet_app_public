@@ -1,7 +1,11 @@
 <div class="header">
-		<% if signed_in? %>
-	  	<%= link_to logo, user_path(current_user) %>
-		<% else %>
-			<%= link_to logo, root_path %>
-		<% end %>
+	<div class="row">	
+		<div class="twelve columns">
+			<% if signed_in? %>
+		  	<%= link_to logo, user_path(current_user) %>
+			<% else %>
+				<%= link_to logo, root_path %>
+			<% end %>
+		</div>
+	</div>
 </div>

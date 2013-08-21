@@ -10,8 +10,7 @@ class Food < ActiveRecord::Base
   validates :name,  :presence => true,
                     :length   => { :minimum => 5 }
                     
-  validates :weight_1_gms, :presence => true,
-                           :numericality => { :greater_than => 0}
+  validates :weight_1_gms, :presence => true
    validates :calories, :presence => true, 
                         :numericality => { :greater_than => 0 }
    validates :protein, :presence => true, :numericality => true

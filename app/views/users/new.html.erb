@@ -1,24 +1,35 @@
 <h1>Welcome to the Diet Tracker!</h1>
 
-<span>Before you start, we need your UID to confirm that you are a participant. If you are, please enter your UID (that's the 9-digit number on your ID card, starting with 11...):</span>
-
 <br/>
 
 <%= form_for @user, :validate => true do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
   <br/>
-	<div class="field"> 
-    <span>UID: <%= f.text_field :id_num %></span>
-	</div>
 	<div class="field">
-    <%= f.hidden_field(:UID, :value=> session[:cas_user]) %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
   </div>
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+    <%= f.hidden_field(:UID, :value=> session[:cas_user]) %>
+	<div class="field">
+    <%= f.label :birth_year, "Your birth year" %>
+    <%= f.select(:birth_year, (Date.today.year-25)..(Date.today.year-17))%>
+<i>Currently, the website is optimized to provide nutritional information for people aged 17-25. We'll be adding support for users of other ages soon, please contact us for more details.</i>
+  </div>
+	<div class="field">
+    <%= f.label :grad_year, "Graduation Year" %>
+    <%= f.select(:grad_year, Date.today.year..(Date.today.year+5))%>
+  </div>
+	<div class="field">
+    <%= f.label :is_male, "Sex" %>
+		<%= f.select(:is_male, [["Male", true],["Female", false]])%>
+	</div>
 	<p><h4> By pressing "Sign up" below you are agreeing to our <%= link_to "Terms and Conditions", terms_path %>.</h4> </p>
-	<p><i>If you are a participant, we'll grab your personal information, such as your email address and name, from the survey you filled out.</i></p>
 	<div class="actions">
-    <%= f.submit "Sign up" %>
+    <%= f.submit "Sign up", :class => "nice large radius blue button"  %>
   </div>
 <% end %>
-
-<p><i>Unfortunately, new registration is not open at this time. If you are not part of this study, you cannot create an account.</i>
 </p>

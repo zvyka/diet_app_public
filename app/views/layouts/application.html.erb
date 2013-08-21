@@ -10,37 +10,48 @@
 		<% csrf_meta_tag %>
   </head>
   <body>
-      	<%= render 'layouts/header' %>
-	    <div class="container">
-				<div class="row round">
-						<div class="twelve columns">
-							<%= render 'layouts/sidebar' %>
-					    <div class="ten columns">
+		<% if $dining_services_special == false%>
+			<div class="container">
+					 <%= render 'layouts/header' %>
+					<div class="row">
+						<%= render 'layouts/sidebar' %>
+						<div class="ten columns">
+							<div class="ten columns">
 								<%= render 'layouts/announcements' %>
 								<br/> 
-								
+
 								<% flash.each do |key, value| %>
-						      <%= content_tag(:div, value, :class => "alert-box #{key}") %>
-						    <% end %>
+								   <%= content_tag(:div, value, :class => "alert-box #{key}") %>
+								 <% end %>
 								<%= yield %>
 							</div>
 						</div>
-				  </div>
-    </div>
-  	<%= render 'layouts/footer' %>
+					</div>
+	    </div>
+	  	<%= render 'layouts/footer' %>
 
-		<script type="text/javascript">
-		  (function() {
-		    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-		    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4yHr2DVqlMeVF8UjDiWJcA.js';
-		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-		  })();
+			<script type="text/javascript">
+			  (function() {
+			    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+			    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/4yHr2DVqlMeVF8UjDiWJcA.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+			  })();
 		
-			  $(window).load(function() {
-			    $(this).joyride({
-			      /* Options will go here */
-			    });
-			  });
-		</script>
+				  $(window).load(function() {
+				    $(this).joyride({
+				      /* Options will go here */
+				    });
+				  });
+			</script>
+		<% else %>
+			<div class="container", style="width: 1024px; height: 800px;">
+				<br/>
+				<br/>
+					<div class="row">
+						<div class="ten columns centered">
+								<%= yield %>
+						</div>
+					</div>
+		<% end %>
   </body>
 </html>

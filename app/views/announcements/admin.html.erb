@@ -1,13 +1,30 @@
-<h1>[ADMIN SECTION] - Authorized Personnel Only!</h1>
+<h1>[ADMIN SECTION]</h1>
 <p>
-	Hello, <%= current_user.name %>. You are authorized.
+	<h3>Hello, <%= current_user.name %>. You are authorized.</h3>
 </p>
 
-<strong>
-	There are currently <%= User.all.size %> users and <%= Meal.all.size %> meals. <%= User.find_all_by_updated_at(DateTime.new(2012, 3, 6)..DateTime.now).size %> users have activated their accounts since the beginning of the study.
-</strong>
-<br/>
-<br/>
+<p>
+		There are currently <strong><%= User.all.size %> total users and <%= Meal.all.size %> total meals.</strong>
+</p>
+
+<p>
+	There are <strong><%= User.find_all_by_group_id(1..2).size %> users in the study, <%= User.find_all_by_group_id(1).size %> in group 1, and <%= User.find_all_by_group_id(2).size %> in group 2</strong>. Group 1 gets access to the email messages and reminder feature.
+</p> 
+
+<p>
+	So far, <strong><%= User.find_all_by_updated_at_and_group_id(DateTime.new(2012, 3, 6)..DateTime.now, 1..2).size %> users</strong> have activated their accounts (since March 6th). That is <b><%= h('%.0f' % (100*User.find_all_by_updated_at_and_group_id(DateTime.new(2012, 3, 6)..DateTime.now, 1..2).size/User.find_all_by_group_id(1..2).size)) %>%</b> of the users in our study.
+</p>
+
+<p>
+	There are <strong><%= @num_zeros %> users (<%= h('%.0f' % (100*@num_zeros/User.find_all_by_group_id(1..2).size)) %>%) with no meals added, and <%= @num_singles %> users (<%= h('%.0f' % (100*@num_singles/User.find_all_by_group_id(1..2).size)) %>%) who have only added one meal</strong>. Looking at active users, <strong><%= @num_zeros_active %> have not added any meals (<%= h('%.0f' % (100*@num_zeros_active/User.find_all_by_updated_at(DateTime.new(2012, 3, 6)..DateTime.now).size)) %>%), and <%= @num_singles_active %> have only added one meal (<%= h('%.0f' % (100*@num_singles_active/User.find_all_by_updated_at(DateTime.new(2012, 3, 6)..DateTime.now).size)) %>%)</strong>.
+</p>
+
+<p>
+	<h1>
+		<u><%= link_to 'Data Extractor!', data_extract_path %></u>
+	</h1>
+</p>
+
 <p>
 	<h1>
 		<u><%= link_to 'Add an Announcement!', new_announcement_path %></u>
@@ -57,37 +74,6 @@
 
 <script type="text/javascript" charset="utf-8">
   $(function() {
-		$(".container").css("background-color", "black")
-		$(".container").css("color", "lawngreen")		
-		$(".container").css("font-family", "monospace")
-		$("body").css("background-color", "black")
-		$("body").css("color", "lawngreen")		
-		$("body").css("font-family", "monospace")
-		$("section").css("background-color", "black")
-		$("section").css("color", "lawngreen")		
-		$("section").css("font-family", "monospace")
-		$("section").css("border-width", "1px")
-		$("section").css("border-style", "solid")
-		$("section").css("border-color", "lawngreen")
-		$("h1").css("font-family", "monospace")
-		$("h1").css("color", "lawngreen")
-		$("h2").css("font-family", "monospace")
-		$("h2").css("color", "lawngreen")
-		$("a").css("background-color", "black")
-		$("a").css("color", "lawngreen")		
-		$("a").css("font-family", "monospace")
-		$("nav").css("background-color", "black")
-		$("nav").css("color", "lawngreen")		
-		$("nav").css("font-family", "monospace")
-		$("nav").css("border-width", "1px")
-		$("nav").css("border-style", "solid")
-		$("nav").css("border-color", "lawngreen")
-		$("img").css("background-color", "lawngreen")
-		$("img").css("color", "lawngreen")		
-		$("img").css("font-family", "monospace")
-		$("img").css("border-width", "1px")
-		$("img").css("border-style", "solid")
-		$("img").css("border-color", "lawngreen")
 		
     new Highcharts.Chart({
       chart: {

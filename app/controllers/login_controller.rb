@@ -11,13 +11,11 @@ class LoginController < ApplicationController
 
   def index
     @username = session[:cas_user]
-    
     @login_url = CASClient::Frameworks::Rails::Filter.login_url(self)
   end
 
   def my_account
     @username = session[:cas_user]
-
     # Additional user attributes are available if your
     # CAS server is configured to provide them.
     # See http://code.google.com/p/rubycas-server/wiki/HowToSendExtraUserAttributes

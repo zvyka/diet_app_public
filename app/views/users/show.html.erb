@@ -133,30 +133,17 @@
 								<% else %>
 									<%= date.day %>
 								<% end %>
-								<% if !Meal.search(date, @user.id).blank? %>
-										<% cals = 0 %>
-										<% salt = 0 %>
-										<% fats = 0 %>
-										<% sugs = 0 %>
-										<% f_and_vs = 0 %>
-										<% for individual_meal in meals do %>
-											<% for ingredient in individual_meal.ingredients do %>
-											<%  if ingredient.fruits_and_vegetables == true %>
-							  				 <% f_and_vs = f_and_vs + 1*ingredient.servings %>
-							  			 <% end %>
-												<% food = Food.find(ingredient.food_id) %>
-												<% if ingredient.serving_size.nil? %>
-													<% multiplication_factor = ingredient.servings%>
-												<% else %>
-													<% multiplication_factor = ingredient.servings*ingredient.serving_size/100%>
-												<% end %>
-												<% cals = cals + (food.calories*multiplication_factor) %>
-												<% salt = salt + (food.sodium*multiplication_factor) %>
-												<% fats = fats + (food.lipid_total*multiplication_factor) %>
-												<% sugs = sugs + (food.sugar_total*multiplication_factor) %>
-											<% end %>
-										<% end %>	
-										<% @chart_data = "#{'%1.2f' % (100*cals/@dvs[:calories])}, #{'%1.2f' % (100*salt/@dvs[:sodium])}, #{'%1.2f' % (100*fats/@dvs[:total_fat])}, #{'%1.2f' % (100*sugs/@dvs[:sugar_total])}, #{'%1.2f' % (100*f_and_vs/@dvs[:f_and_vs])}" %>
+								
+								<% this_meal = Meal.search(date, @user.id) %>
+								<% if !this_meal.blank? %>
+								
+								     <% cals =      this_meal.first.total_cals  %>
+								     <% salt =      this_meal.first.total_salt  %>
+								     <% fats =      this_meal.first.total_fats  %>
+								     <% sugs =      this_meal.first.total_sugs  %>
+								     <% f_and_vs =  this_meal.first.total_f_vs  %>
+
+										<% chart_data = "#{'%1.2f' % (100*cals/@dvs[:calories])}, #{'%1.2f' % (100*salt/@dvs[:sodium])}, #{'%1.2f' % (100*fats/@dvs[:total_fat])}, #{'%1.2f' % (100*sugs/@dvs[:sugar_total])}, #{'%1.2f' % (100*f_and_vs/@dvs[:f_and_vs])}" %>
 										<div  style="overflow: hidden;"><a href="<%= meal_path(Meal.search(date, @user.id).sort_by(&:time_of_day).first.id) %>" style="overflow: hidden;"><div id="<%= "#{date}_chart" %>" style="margin-left: -50px; margin-top: -50px; margin-bottom: -52px;"></div>
 										</a></div>
 										<script>
@@ -202,7 +189,7 @@
 										            text: ' '
 										         },
 														plotLines: [{
-														            color: 'red',
+														            color: 'grey',
 														            width: 2,
 														            value: 100
 														        }],
@@ -250,7 +237,7 @@
 										      },
 										      series: [{
 														 type: 'column',
-										         data: [<%= @chart_data %>]
+										         data: [<%= chart_data %>]
 										      }]                 
 										   });                  
 

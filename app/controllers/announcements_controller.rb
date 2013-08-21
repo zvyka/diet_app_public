@@ -16,7 +16,39 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+  def data_extract
+    if current_user.group_id != 3
+      redirect_to user_path(current_user), :notice => "Unauthorized User."
+    end
+
+    @title = "Extract Data"
+
+    # @column_names = User.column_names
+    # @column_names.reject! {|n| n =~ /(is_special)|(encrypted_password)|(salt)/}
+
+    @search = User.search(params[:q])
+    @users = @search.result
+    @search.build_condition
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data generate_csv(@users) 
+      end
+    end
+  end
+
+  def generate_csv(array)
+    FasterCSV.generate do |csv|
+      csv << User.column_names
+      array.each do |a|
+        csv << a.attributes.values_at(*User.column_names)
+      end
+    end
+  end
+
   def admin
+    @title = "Admin"
     if current_user.group_id != 3
       redirect_to user_path(current_user), :notice => "Unauthorized User."
     end
@@ -38,12 +70,32 @@ class AnnouncementsController < ApplicationController
     
     @top_users = ""
     @top_meals = ""
+    @num_singles = 0
+    @num_zeros = 0
     
-    User.all.each do |user|
+    User.find_all_by_group_id(1..2).each do |user|
       num_meals = Meal.find_all_by_user_id(user.id).size
-      if num_meals > 10
+      if num_meals == 1
+        @num_singles = @num_singles+1
+      elsif num_meals == 0
+        @num_zeros = @num_zeros + 1
+      end
+      
+      if num_meals >= 3
         @top_users = "#{@top_users + "," if !@top_users.blank?} '#{user.name}'"
         @top_meals = "#{@top_meals + "," if !@top_meals.blank?} #{num_meals}"
+      end
+    end
+    
+    @num_singles_active = 0
+    @num_zeros_active = 0
+    
+    User.find_all_by_updated_at_and_group_id(DateTime.new(2012, 3, 6)..DateTime.now, 1..2).each do |user|
+      num_meals = Meal.find_all_by_user_id(user.id).size
+      if num_meals == 1
+        @num_singles_active = @num_singles_active+1
+      elsif num_meals == 0
+        @num_zeros_active = @num_zeros_active + 1
       end
     end
     

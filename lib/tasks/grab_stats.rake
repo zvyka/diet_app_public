@@ -90,7 +90,7 @@ task :get_all_study_stats => :environment do
     # @new_users   = "#{@new_users + "," if !@new_users.blank?} '#{days_users}'"
     # @new_dates   = "#{@new_dates + "," if !@new_dates.blank?} '#{day.strftime('%b. %e')}'"
     puts "On #{day.strftime('%b. %e')}: #{new_exp_users.size} users,#{days_meals.size} meals,#{(days_meals.size).fdiv (new_exp_users.size)} meals per user"
-    File.open('/Users/jon/Sites/diet_app/new_stats.txt', 'a+') {|f|
+    File.open('/Users/jon/Sites/diet_app/spring_new_stats.txt', 'a+') {|f|
  f.write("\n#{new_exp_users.size},#{days_meals.size},#{(days_meals.size).fdiv (new_exp_users.size)},#{day.strftime('%b. %e')}") 
     }
   end
@@ -114,7 +114,7 @@ task :get_all_study_stats => :environment do
    (start_date..Date.today).each do |day|
      days_meals = all_exp_1_meals.find_all{|item| item.date_eaten <= day}
      puts "On #{day.strftime('%b. %e')}: #{new_exp_1_users.size} users,#{days_meals.size} meals,#{(days_meals.size).fdiv (new_exp_1_users.size)} meals per user"
-     File.open('/Users/jon/Sites/diet_app/new_exp_1_stats.txt', 'a+') {|f|
+     File.open('/Users/jon/Sites/diet_app/spring_new_exp_1_stats.txt', 'a+') {|f|
   f.write("\n#{new_exp_1_users.size},#{days_meals.size},#{(days_meals.size).fdiv (new_exp_1_users.size)},#{day.strftime('%b. %e')}") 
      }
    end
@@ -138,9 +138,24 @@ task :get_all_study_stats => :environment do
     (start_date..Date.today).each do |day|
       days_meals = all_exp_2_meals.find_all{|item| item.date_eaten <= day}
       puts "On #{day.strftime('%b. %e')}: #{new_exp_2_users.size} users,#{days_meals.size} meals,#{(days_meals.size).fdiv (new_exp_2_users.size)} meals per user"
-      File.open('/Users/jon/Sites/diet_app/new_exp_2_stats.txt', 'a+') {|f|
+      File.open('/Users/jon/Sites/diet_app/spring_new_exp_2_stats.txt', 'a+') {|f|
    f.write("\n#{new_exp_2_users.size},#{days_meals.size},#{(days_meals.size).fdiv (new_exp_2_users.size)},#{day.strftime('%b. %e')}") 
       }
     end
 end
 
+desc "One-time run of stats since start of study: Oct 10, 2011"
+
+task :get_user_stats => :environment do
+  puts "All Exp. Users:"
+  f = File.open('/Users/jon/Sites/diet_app/spring_user_exp_2_stats.txt', 'a+')
+
+  exp_users = User.find_all_by_group_id(1..2)
+  f.write("\ngroup_id, Name, Num Meals, ")
+  exp_users.each do |user|
+      meals = Meal.find_all_by_user_id(user.id)
+      f.write("\n#{user.group_id},#{user.name}, #{meals.size}") 
+  end
+
+  f.close
+end

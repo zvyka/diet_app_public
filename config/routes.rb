@@ -31,10 +31,13 @@ DietApp::Application.routes.draw do
   match '/privacy',  :to => 'pages#privacy_statement'
   match '/faq',      :to => 'pages#faq'
   match '/admin',    :to => 'announcements#admin'
-    
+  match '/data_extract', :to => 'announcements#data_extract', :as => :data_extract
+
   match '/foods',    :to => 'foods#index'
   match '/food_search', :to => 'foods#search'
   match '/myfoods', :to => 'foods#myfoods'
+  match '/dining_services', :to => 'foods#dining'
+  match '/dining_search', :to => 'foods#dining_search', :as => 'dining_services_path'
   
   root :to => 'pages#home'
 

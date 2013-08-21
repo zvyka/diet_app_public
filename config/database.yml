@@ -3,7 +3,7 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: diet_development
+  database: diet_public_development
   pool: 5
   username: diet
   password: Gemstone13
@@ -15,7 +15,7 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
-  database: diet_test
+  database: diet_public_test
   pool: 5
   username: diet
   password: Gemstone13
@@ -24,7 +24,7 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: diet_production
+  database: diet_public_production
   pool: 5
   username: diet
   password: Gemstone13

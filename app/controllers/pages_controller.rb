@@ -4,7 +4,6 @@ class PagesController < ApplicationController
      # This requires the user to be authenticated for viewing allother pages.
       before_filter CASClient::Frameworks::Rails::Filter, :except => [:home, :about, :faq, :privacy_statement, :help, :terms]
    
-   
   def logout
     CASClient::Frameworks::Rails::Filter.logout(self, "diettracker.umd.edu")
   end

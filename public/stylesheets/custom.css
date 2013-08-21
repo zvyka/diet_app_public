@@ -6,6 +6,10 @@ body {
 	padding: 0;
 }
 
+.row {
+	max-width: 1400px;
+}
+
 html{
 	background-image: url('/images/background.png');
 }
@@ -866,6 +870,11 @@ legend {
 	margin: 10px 10px 10px 0;
 }
 
+.food_search_submit {
+	font-size: 24px;
+	margin-bottom: 5px;
+}
+
 div.alert-box {
 	font-weight: normal;
 }
@@ -921,6 +930,10 @@ display: inline;
 	margin-bottom: 50px;
 	position: relative;
 	display: block;
+}
+
+div.data_extract input.input-text, textarea, select{
+    display: inline;
 }
 
 .f_and_vs_num {

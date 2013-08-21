@@ -1,12 +1,12 @@
 class FoodsController < ApplicationController
-  before_filter CASClient::Frameworks::Rails::Filter
-  before_filter :authenticate
+  before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => [:dining, :dining_search, :show]
+  before_filter CASClient::Frameworks::Rails::Filter, :except => [:dining, :dining_search, :show]
+  before_filter :authenticate, :except => [:dining, :dining_search, :show]
   
   include ActionView::Helpers::SanitizeHelper
   
   def index
     food_search = Food.search('"^' + params[:term] + '"|"' + params[:term] + '"|(' + params[:term] + ')', :match_mode => :extended2, :excerpts => false, :per_page => 100, :order => :umd, :sort_mode => :desc)
-    
     @foods = food_search.find_all{|food| food.user_id==nil || food.user_id==current_user.id}
     
     respond_to do |format|
@@ -37,7 +37,10 @@ class FoodsController < ApplicationController
       # puts current_user.id
       redirect_to root_path
     end
-    
+    @chart_data = "#{'%1.2f' % (100*@food.calories/@dvs[:calories])},
+               #{'%1.2f' % (100*@food.sodium/@dvs[:sodium])},
+               #{'%1.2f' % (100*@food.lipid_total/@dvs[:total_fat])}, 
+               #{'%1.2f' % (100*@food.sugar_total/@dvs[:sugar_total])}"
   end
 
   def search
@@ -53,6 +56,38 @@ class FoodsController < ApplicationController
         @foods = Food.find_all_by_user_id(current_user.id) 
       end
       
+  end
+  
+  def dining
+      $dining_services_special = true
+      query = params[:term].nil? ? nil : params[:term].gsub(/[\+\-\"\/\\]/,'')
+      if !query.nil? 
+        if params[:term].blank?
+          redirect_to food_search_path 
+        else
+          food_search = Food.search('"^' + query + '"|"' + query + '"|(' + query + ')', :match_mode => :extended2, :excerpts => false, :per_page => 100, :order => :umd, :sort_mode => :desc)
+          @foods = food_search.find_all{|food| food.umd == 1}
+        end
+      else 
+        @foods = Food.find_all_by_user_id(current_user.id) 
+      end
+      
+      respond_to do |format|
+        format.html
+        format.json do 
+               # make an array
+               @foods.map! do |u| 
+                 {
+                     :food_id => u.id.nil? ? 0 : u.id,
+                     :value => u.user_id.nil? ? (u.nil? ? "" : strip_tags(u.name)) : strip_tags(u.name),
+                     :grams => u.weight_1_gms.nil? ? 0 : u.weight_1_gms ,
+                     :serving => u.weight_1_desc.nil? ? 0 : u.weight_1_desc,
+                     :umd => u.umd.nil? ? 0 : u.umd
+                 }
+               end
+               render :json => @foods 
+             end
+      end
   end
   
   def new

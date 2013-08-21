@@ -22,6 +22,7 @@ gem "deep_cloneable"
 gem "id3"
 gem "fastercsv"
 gem "airbrake"
+gem "ransack"
 
 #CAS stuff
 gem 'rubycas-client'
